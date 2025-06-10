@@ -1,5 +1,4 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronDown } from "lucide-react";
 
 interface SearchFiltersProps {
   filters: {
@@ -32,10 +31,9 @@ export default function SearchFilters({ filters, onFiltersChange }: SearchFilter
         >
           <SelectTrigger className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-material-1 focus:ring-2 focus:ring-material-blue focus:border-material-blue h-12">
             <SelectValue placeholder="Assignment Group" />
-            <ChevronDown className="h-4 w-4 opacity-50" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Groups</SelectItem>
+            <SelectItem value="all">All Groups</SelectItem>
             <SelectItem value="database">Database Team</SelectItem>
             <SelectItem value="performance">Performance Team</SelectItem>
             <SelectItem value="security">Security Team</SelectItem>
@@ -51,10 +49,9 @@ export default function SearchFilters({ filters, onFiltersChange }: SearchFilter
         >
           <SelectTrigger className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-material-1 focus:ring-2 focus:ring-material-blue focus:border-material-blue h-12">
             <SelectValue placeholder="Case Type" />
-            <ChevronDown className="h-4 w-4 opacity-50" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Types</SelectItem>
+            <SelectItem value="all">All Types</SelectItem>
             <SelectItem value="bug">Bug Report</SelectItem>
             <SelectItem value="performance">Performance Issue</SelectItem>
             <SelectItem value="configuration">Configuration</SelectItem>
@@ -65,14 +62,14 @@ export default function SearchFilters({ filters, onFiltersChange }: SearchFilter
       {/* Date Filter */}
       <div className="relative">
         <Select
-          value=""
+          value="all"
           onValueChange={() => {}}
         >
           <SelectTrigger className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-material-1 focus:ring-2 focus:ring-material-blue focus:border-material-blue h-12">
             <SelectValue placeholder="Date" />
-            <ChevronDown className="h-4 w-4 opacity-50" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="all">All Dates</SelectItem>
             <SelectItem value="today">Today</SelectItem>
             <SelectItem value="week">This Week</SelectItem>
             <SelectItem value="month">This Month</SelectItem>
@@ -89,10 +86,9 @@ export default function SearchFilters({ filters, onFiltersChange }: SearchFilter
         >
           <SelectTrigger className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-material-1 focus:ring-2 focus:ring-material-blue focus:border-material-blue h-12">
             <SelectValue placeholder="Status" />
-            <ChevronDown className="h-4 w-4 opacity-50" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Statuses</SelectItem>
+            <SelectItem value="all">All Statuses</SelectItem>
             <SelectItem value="open">Open</SelectItem>
             <SelectItem value="in-progress">In Progress</SelectItem>
             <SelectItem value="resolved">Resolved</SelectItem>
