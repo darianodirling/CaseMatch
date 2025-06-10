@@ -17,7 +17,7 @@ export default function SearchFilters({ filters, onFiltersChange }: SearchFilter
   const handleFilterChange = (key: string, value: string) => {
     onFiltersChange({
       ...filters,
-      [key]: value,
+      [key]: value === "all" ? "" : value,
     });
   };
 
@@ -26,7 +26,7 @@ export default function SearchFilters({ filters, onFiltersChange }: SearchFilter
       {/* Assignment Group Filter */}
       <div className="relative">
         <Select
-          value={filters.assignmentGroup}
+          value={filters.assignmentGroup || "all"}
           onValueChange={(value) => handleFilterChange('assignmentGroup', value)}
         >
           <SelectTrigger className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-material-1 focus:ring-2 focus:ring-material-blue focus:border-material-blue h-12">
@@ -44,7 +44,7 @@ export default function SearchFilters({ filters, onFiltersChange }: SearchFilter
       {/* Case Type Filter */}
       <div className="relative">
         <Select
-          value={filters.caseType}
+          value={filters.caseType || "all"}
           onValueChange={(value) => handleFilterChange('caseType', value)}
         >
           <SelectTrigger className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-material-1 focus:ring-2 focus:ring-material-blue focus:border-material-blue h-12">
@@ -81,7 +81,7 @@ export default function SearchFilters({ filters, onFiltersChange }: SearchFilter
       {/* Status Filter */}
       <div className="relative">
         <Select
-          value={filters.status}
+          value={filters.status || "all"}
           onValueChange={(value) => handleFilterChange('status', value)}
         >
           <SelectTrigger className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-material-1 focus:ring-2 focus:ring-material-blue focus:border-material-blue h-12">
