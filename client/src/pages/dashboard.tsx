@@ -91,7 +91,6 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-light text-gray-900 mb-8">CaseMatch</h1>
           
