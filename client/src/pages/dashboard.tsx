@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Search } from "lucide-react";
+import { Search, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CaseCard from "@/components/CaseCard";
 import SearchFilters from "@/components/SearchFilters";
+import SimilaritySearch from "@/components/SimilaritySearch";
 import type { Case } from "@shared/schema";
 
 export default function Dashboard() {
@@ -93,76 +95,96 @@ export default function Dashboard() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-light text-gray-900 mb-8">CaseMatch</h1>
           
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto mb-8">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
-              </div>
-              <Input
-                type="text"
-                placeholder="Search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-lg bg-white shadow-material-1 focus:ring-2 focus:ring-material-blue focus:border-material-blue transition-all duration-200 h-14"
-              />
-            </div>
-          </div>
+          {/* Tab Navigation */}
+          <Tabs defaultValue="search" className="w-full">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
+              <TabsTrigger value="search" className="flex items-center space-x-2">
+                <Search className="h-4 w-4" />
+                <span>Case Search</span>
+              </TabsTrigger>
+              <TabsTrigger value="similarity" className="flex items-center space-x-2">
+                <Sparkles className="h-4 w-4" />
+                <span>AI Similarity</span>
+              </TabsTrigger>
+            </TabsList>
 
-          {/* Filter Dropdowns */}
-          <SearchFilters filters={filters} onFiltersChange={setFilters} />
-        </div>
-
-        {/* Search Results */}
-        <div className="space-y-4">
-          {isLoading && (
-            <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-white rounded-lg shadow-material-1 p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <Skeleton className="h-6 w-32 mb-3" />
-                      <Skeleton className="h-4 w-full mb-2" />
-                      <Skeleton className="h-3 w-3/4" />
-                    </div>
-                    <div className="flex flex-col items-end">
-                      <Skeleton className="h-8 w-12 mb-1" />
-                      <Skeleton className="h-2 w-20" />
-                    </div>
+            <TabsContent value="search" className="space-y-8">
+              {/* Traditional Search Bar */}
+              <div className="max-w-2xl mx-auto">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Search className="h-5 w-5 text-gray-400" />
                   </div>
+                  <Input
+                    type="text"
+                    placeholder="Search cases..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-lg bg-white shadow-material-1 focus:ring-2 focus:ring-material-blue focus:border-material-blue transition-all duration-200 h-14"
+                  />
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
 
-          {error && (
-            <div className="text-center py-12">
-              <div className="text-red-500 text-lg font-medium mb-2">Error loading cases</div>
-              <p className="text-gray-500">Please try again later</p>
-            </div>
-          )}
+              {/* Filter Dropdowns */}
+              <SearchFilters filters={filters} onFiltersChange={setFilters} />
 
-          {!isLoading && !error && cases && cases.length === 0 && (
-            <div className="text-center py-12">
-              <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No cases found</h3>
-              <p className="text-gray-500">Try adjusting your search terms or filters</p>
-            </div>
-          )}
+              {/* Search Results */}
+              <div className="space-y-4">
+                {isLoading && (
+                  <div className="space-y-4">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="bg-white rounded-lg shadow-material-1 p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <Skeleton className="h-6 w-32 mb-3" />
+                            <Skeleton className="h-4 w-full mb-2" />
+                            <Skeleton className="h-3 w-3/4" />
+                          </div>
+                          <div className="flex flex-col items-end">
+                            <Skeleton className="h-8 w-12 mb-1" />
+                            <Skeleton className="h-2 w-20" />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
-          {!isLoading && !error && cases && cases.length > 0 && (
-            <>
-              {cases.map((caseItem) => (
-                <CaseCard
-                  key={caseItem.id}
-                  caseItem={caseItem}
-                  onClick={() => handleCaseClick(caseItem)}
-                  getSimilarityColor={getSimilarityColor}
-                  getSimilarityBarColor={getSimilarityBarColor}
-                />
-              ))}
-            </>
-          )}
+                {error && (
+                  <div className="text-center py-12">
+                    <div className="text-red-500 text-lg font-medium mb-2">Error loading cases</div>
+                    <p className="text-gray-500">Please try again later</p>
+                  </div>
+                )}
+
+                {!isLoading && !error && cases && cases.length === 0 && (
+                  <div className="text-center py-12">
+                    <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No cases found</h3>
+                    <p className="text-gray-500">Try adjusting your search terms or filters</p>
+                  </div>
+                )}
+
+                {!isLoading && !error && cases && cases.length > 0 && (
+                  <>
+                    {cases.map((caseItem) => (
+                      <CaseCard
+                        key={caseItem.id}
+                        caseItem={caseItem}
+                        onClick={() => handleCaseClick(caseItem)}
+                        getSimilarityColor={getSimilarityColor}
+                        getSimilarityBarColor={getSimilarityBarColor}
+                      />
+                    ))}
+                  </>
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="similarity">
+              <SimilaritySearch />
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
     </div>

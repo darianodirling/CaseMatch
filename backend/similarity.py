@@ -22,31 +22,43 @@ class SimilaritySearcher:
         Returns True if connection successful, False otherwise
         """
         try:
-            # Create SAS session configuration
-            sas_config = {
-                'saspath': '/opt/sasinside/SASHome/SASFoundation/9.4/bin/sas_u8',
-                'options': ['-fullstimer', '-log', '/tmp'],
-                'encoding': 'utf8'
-            }
+            from config import Config
             
-            # Initialize SAS session
-            self.sas = saspy.SASsession(cfgname='default')
+            # Get SAS configuration from config
+            sas_config = Config.get_sas_config()
+            
+            # Initialize SAS session with configuration
+            self.sas = saspy.SASsession(cfgname='default', **sas_config)
             
             if self.sas is None:
                 logger.error("Failed to create SAS session")
                 return False
+            
+            # Test basic SAS functionality
+            test_code = """
+            proc options option=work;
+            run;
+            """
+            result = self.sas.submit(test_code)
+            
+            if 'ERROR' in result:
+                logger.error(f"SAS session test failed: {result}")
+                return False
                 
             # Connect to CAS server
-            cas_code = """
-            cas conn;
+            cas_config = Config.get_cas_config()
+            cas_code = f"""
+            cas conn host="{cas_config['hostname']}" port={cas_config['port']};
             """
             result = self.sas.submit(cas_code)
             
-            if result.find('ERROR') != -1:
-                logger.error(f"CAS connection failed: {result}")
-                return False
+            if 'ERROR' in result:
+                logger.warning(f"CAS connection failed, proceeding without CAS: {result}")
+                # Continue without CAS - we can still access SAS datasets
+            else:
+                logger.info("Successfully connected to CAS")
                 
-            logger.info("Successfully connected to SAS Viya and CAS")
+            logger.info("Successfully connected to SAS Viya")
             return True
             
         except Exception as e:
