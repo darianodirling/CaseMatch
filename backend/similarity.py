@@ -234,8 +234,12 @@ def get_similar_cases(case_number: str, top_k: int = 5) -> List[Dict]:
                 logger.error("Failed to load topic vectors data")
                 return []
         
-        # Calculate and return similarities
-        return similarity_searcher.calculate_similarity(case_number, top_k)
+        # Ensure data is available before calculating similarities
+        if similarity_searcher.topic_vectors_data is not None and len(similarity_searcher.topic_vectors_data) > 0:
+            return similarity_searcher.calculate_similarity(case_number, top_k)
+        else:
+            logger.error("No topic vectors data available for similarity calculation")
+            return []
         
     except Exception as e:
         logger.error(f"Error in get_similar_cases: {str(e)}")
@@ -249,8 +253,11 @@ def test_connection():
             print("✓ SAS Viya connection successful")
             if searcher.load_topic_vectors():
                 print("✓ Topic vectors loaded successfully")
-                print(f"✓ Loaded {len(searcher.topic_vectors_data)} records")
-                return True
+                if searcher.topic_vectors_data is not None:
+                    print(f"✓ Loaded {len(searcher.topic_vectors_data)} records")
+                    return True
+                else:
+                    print("✗ No data in topic vectors")
             else:
                 print("✗ Failed to load topic vectors")
         else:
