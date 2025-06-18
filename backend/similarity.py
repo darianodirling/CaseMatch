@@ -22,13 +22,8 @@ class SimilaritySearcher:
         Returns True if connection successful, False otherwise
         """
         try:
-            from config import Config
-            
-            # Get SAS configuration from config
-            sas_config = Config.get_sas_config()
-            
-            # Initialize SAS session with configuration
-            self.sas = saspy.SASsession(cfgname='default', **sas_config)
+            # Initialize SAS session with Viya configuration
+            self.sas = saspy.SASsession(cfgname='viya')
             
             if self.sas is None:
                 logger.error("Failed to create SAS session")
@@ -41,20 +36,27 @@ class SimilaritySearcher:
             """
             result = self.sas.submit(test_code)
             
-            if 'ERROR' in result:
-                logger.error(f"SAS session test failed: {result}")
+            if 'ERROR' in result['LOG']:
+                logger.error(f"SAS session test failed: {result['LOG']}")
                 return False
                 
             # Connect to CAS server
-            cas_config = Config.get_cas_config()
-            cas_code = f"""
-            cas conn host="{cas_config['hostname']}" port={cas_config['port']};
+            cas_code = """
+            cas mySession;
             """
             result = self.sas.submit(cas_code)
             
-            if 'ERROR' in result:
-                logger.warning(f"CAS connection failed, proceeding without CAS: {result}")
-                # Continue without CAS - we can still access SAS datasets
+            if 'ERROR' in result['LOG']:
+                logger.warning(f"CAS connection failed: {result['LOG']}")
+                # Try alternative CAS connection
+                cas_code_alt = """
+                cas;
+                """
+                result = self.sas.submit(cas_code_alt)
+                if 'ERROR' in result['LOG']:
+                    logger.warning("CAS connection failed, proceeding without CAS")
+                else:
+                    logger.info("Connected to CAS using default session")
             else:
                 logger.info("Successfully connected to CAS")
                 
@@ -67,7 +69,7 @@ class SimilaritySearcher:
     
     def load_topic_vectors(self) -> bool:
         """
-        Load the topic_vectors CAS table from casuser library
+        Load the topic_vectors CAS table from casuser(daodir) library
         Returns True if successful, False otherwise
         """
         try:
@@ -75,44 +77,50 @@ class SimilaritySearcher:
                 logger.error("SAS session not initialized")
                 return False
             
-            # Load the topic_vectors table from CAS
-            load_code = """
-            proc casutil;
-                load casdata="topic_vectors" incaslib="casuser" outcaslib="casuser";
-            quit;
-            
-            proc cas;
-                table.fetch /
-                    table={name="topic_vectors", caslib="casuser"}
-                    to=100000;
-            quit;
-            """
-            
-            result = self.sas.submit(load_code)
-            
-            if result.find('ERROR') != -1:
-                logger.error(f"Failed to load topic_vectors table: {result}")
-                return False
-            
-            # Get the data as a pandas DataFrame
-            df_code = """
-            proc cas;
-                table.fetch /
-                    table={name="topic_vectors", caslib="casuser"}
-                    to=100000;
-                saveresult result=r;
-            quit;
-            """
-            
-            # Execute and get DataFrame
-            self.topic_vectors_data = self.sas.sasdata('topic_vectors', 'casuser').to_df()
-            
-            if self.topic_vectors_data is None or self.topic_vectors_data.empty:
-                logger.error("No data retrieved from topic_vectors table")
-                return False
+            # First, try to access the table directly from your casuser library
+            try:
+                self.topic_vectors_data = self.sas.sasdata('topic_vectors', 'casuser').to_df()
                 
-            logger.info(f"Successfully loaded {len(self.topic_vectors_data)} records from topic_vectors")
-            return True
+                if self.topic_vectors_data is not None and not self.topic_vectors_data.empty:
+                    logger.info(f"Successfully loaded {len(self.topic_vectors_data)} records from topic_vectors")
+                    logger.info(f"Columns available: {list(self.topic_vectors_data.columns)}")
+                    return True
+                    
+            except Exception as direct_error:
+                logger.warning(f"Direct table access failed: {str(direct_error)}")
+            
+            # Alternative approach: Use CAS table operations
+            cas_code = """
+            proc casutil;
+                list tables caslib="casuser";
+            quit;
+            
+            data work.topic_vectors_temp;
+                set casuser.topic_vectors;
+            run;
+            """
+            
+            result = self.sas.submit(cas_code)
+            
+            if 'ERROR' in result['LOG']:
+                logger.error(f"Failed to access topic_vectors table: {result['LOG']}")
+                return False
+            
+            # Try to get data through work library
+            try:
+                self.topic_vectors_data = self.sas.sasdata('topic_vectors_temp', 'work').to_df()
+                
+                if self.topic_vectors_data is not None and not self.topic_vectors_data.empty:
+                    logger.info(f"Successfully loaded {len(self.topic_vectors_data)} records via work library")
+                    logger.info(f"Columns available: {list(self.topic_vectors_data.columns)}")
+                    return True
+                else:
+                    logger.error("No data retrieved from topic_vectors table")
+                    return False
+                    
+            except Exception as work_error:
+                logger.error(f"Failed to load data via work library: {str(work_error)}")
+                return False
             
         except Exception as e:
             logger.error(f"Error loading topic vectors: {str(e)}")
