@@ -19,13 +19,13 @@ pip install flask flask-cors saspy scikit-learn pandas numpy
 
 ### 2. Configure Environment
 
-The `.env` file is already configured with your credentials:
+The `.env` file is configured with your exact table configuration:
 ```
 SAS_HOST=trck1056928.trc.sas.com
 SAS_USERNAME=daodir
 SAS_PASSWORD=daodir1
-TOPIC_VECTORS_TABLE=topic_vectors
-TOPIC_VECTORS_CASLIB=casuser
+TOPIC_VECTORS_TABLE=topic_vectors.sashdat
+TOPIC_VECTORS_CASLIB=CASUSER(daodir)
 ```
 
 ### 3. Test SAS Viya Connection
@@ -106,28 +106,42 @@ Your `topic_vectors` table contains:
 ## Troubleshooting
 
 **Connection Issues:**
-- Verify network access to `trck1056928.trc.sas.com`
-- Check credentials in `.env` file
-- Ensure SAS Viya server is running
+- The test failed with "Name or service not known" because this development environment cannot reach your SAS server
+- When running locally with network access to `trck1056928.trc.sas.com`, the connection should work
+- Verify credentials and ensure SAS Viya server is accessible from your network
 
 **Data Access Issues:**
-- Verify `topic_vectors` table exists in `casuser(daodir)`
-- Check table permissions
-- Confirm table structure matches expectations
+- Your table `topic_vectors.sashdat` exists in `CASUSER(daodir)` library (confirmed from screenshot)
+- Table contains the expected columns: `_TextTopic_1` through `_TextTopic_5`, `Case Number`, `Assignment Group`, etc.
+- No changes needed to table structure
 
-**Performance Issues:**
-- Consider limiting vector dimensions for faster similarity calculations
-- Implement caching for frequently accessed cases
-- Monitor memory usage with large datasets
+**Environment Issues:**
+- The test showed numpy import conflicts in this environment
+- On your local machine with proper Python setup, dependencies should install cleanly
+- Use the production deployment script for clean environment setup
 
 ## Production Deployment
 
-For production deployment:
-1. Update CORS settings in `app.py` for your domain
-2. Use environment variables instead of `.env` file
-3. Configure proper logging and monitoring
-4. Consider using a production WSGI server like Gunicorn
-5. Implement authentication and authorization as needed
+For production deployment, use the automated deployment script:
+
+```bash
+cd backend
+python deploy_production.py
+```
+
+This script will:
+1. Install all dependencies with proper versions
+2. Create production environment configuration
+3. Generate systemd service files
+4. Create nginx reverse proxy configuration
+5. Set up proper logging and monitoring
+
+Manual production steps:
+1. Run the deployment script on your production server
+2. Copy and enable the systemd service
+3. Configure nginx for SSL and reverse proxy
+4. Update CORS settings for your production domain
+5. Set up log rotation and monitoring
 
 ## Architecture Overview
 

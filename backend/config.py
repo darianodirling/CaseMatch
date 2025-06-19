@@ -37,9 +37,9 @@ class Config:
     CAS_PORT = int(os.getenv('CAS_PORT', 5570))
     CAS_PROTOCOL = os.getenv('CAS_PROTOCOL', 'cas')
     
-    # Data settings
-    TOPIC_VECTORS_TABLE = os.getenv('TOPIC_VECTORS_TABLE', 'topic_vectors')
-    TOPIC_VECTORS_CASLIB = os.getenv('TOPIC_VECTORS_CASLIB', 'casuser')
+    # Data settings (based on your SAS Data Explorer screenshot)
+    TOPIC_VECTORS_TABLE = os.getenv('TOPIC_VECTORS_TABLE', 'topic_vectors.sashdat')
+    TOPIC_VECTORS_CASLIB = os.getenv('TOPIC_VECTORS_CASLIB', 'CASUSER(daodir)')
     
     # API settings
     MAX_SIMILAR_CASES = int(os.getenv('MAX_SIMILAR_CASES', 20))
