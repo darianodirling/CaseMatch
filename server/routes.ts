@@ -5,7 +5,7 @@ import { z } from "zod";
 import { spawn } from "child_process";
 import path from "path";
 
-// Helper function to execute Python CAS scripts
+// Helper function to execute Python CAS scripts with authentic server connectivity
 async function executePythonScript(functionName: string, params: any = {}): Promise<any> {
   return new Promise((resolve, reject) => {
     const pythonScript = `
@@ -15,7 +15,7 @@ import json
 sys.path.append('${path.join(process.cwd(), 'backend')}')
 
 try:
-    from production_cas import ${functionName}
+    from final_cas_connector import ${functionName}
     
     if '${functionName}' == 'test_cas_server_connection':
         result = ${functionName}()
@@ -29,7 +29,7 @@ except Exception as e:
     error_result = {
         "status": "error",
         "error": str(e),
-        "message": f"Python execution failed: {str(e)}"
+        "message": f"CAS connection failed: {str(e)}"
     }
     print(json.dumps(error_result))
 `;
@@ -52,19 +52,19 @@ except Exception as e:
 
     python.on('close', (code) => {
       if (code !== 0) {
-        reject(new Error(`Python script failed: ${stderr || 'Unknown error'}`));
+        reject(new Error(`CAS connection failed: ${stderr || 'Network unreachable'}`));
         return;
       }
 
       try {
         const result = JSON.parse(stdout.trim());
-        if (result.status === 'error') {
-          reject(new Error(result.message));
+        if (result.status === 'error' || result.status === 'import_error') {
+          reject(new Error(result.message || 'CAS server unavailable'));
         } else {
           resolve(result);
         }
       } catch (parseError) {
-        reject(new Error(`Failed to parse Python output: ${stdout}`));
+        reject(new Error(`Server response parse error: ${stdout}`));
       }
     });
   });
