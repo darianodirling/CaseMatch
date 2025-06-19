@@ -17,7 +17,7 @@ viya = {
     'client_id': 'dariansclientid',
     'client_secret': 'dariansclientsecret',    
     'username': 'daodir',                   
-    'password': 'daodir1',              
+    'password': 'Snap.fitness30',              
     'authentication': 'oauth',
     'context': 'SAS Studio compute context' 
 }

@@ -30,7 +30,7 @@ class Config:
     SAS_HOST = os.getenv('SAS_HOST', 'trck1056928.trc.sas.com')
     SAS_PORT = os.getenv('SAS_PORT', '443')
     SAS_USERNAME = os.getenv('SAS_USERNAME', 'daodir')
-    SAS_PASSWORD = os.getenv('SAS_PASSWORD', 'daodir1')
+    SAS_PASSWORD = os.getenv('SAS_PASSWORD', 'Snap.fitness30')
     
     # CAS settings
     CAS_HOST = os.getenv('CAS_HOST', 'trck1056928.trc.sas.com')
