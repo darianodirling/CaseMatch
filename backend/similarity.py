@@ -22,17 +22,9 @@ class SimilaritySearcher:
         Returns True if connection successful, False otherwise
         """
         try:
-            # Initialize SAS session using config from config.py
-            from config import Config
-            sas_config = Config.get_sas_config()
-            
-            # Try the 'viya' configuration first, fall back to direct config
-            try:
-                self.sas = saspy.SASsession(cfgname='viya')
-                logger.info("Connected using 'viya' configuration from sascfg_personal.py")
-            except:
-                logger.info("Falling back to direct configuration from config.py")
-                self.sas = saspy.SASsession(**sas_config)
+            # Use the OAuth2-aware authentication handler
+            from sas_auth_handler import get_sas_session_with_auth
+            self.sas = get_sas_session_with_auth()
             
             if self.sas is None:
                 logger.error("Failed to create SAS session")

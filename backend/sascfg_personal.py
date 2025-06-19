@@ -13,9 +13,11 @@ SAS_config_options = {
 }
 
 viya = {
-    'url': 'https://trck1056928.trc.sas.com',
-    'context': 'SAS Studio compute context',
-    'user': 'daodir',
-    'pw': 'daodir1',
-    'options': ['-fullstimer']
+    'sasurl': 'https://trck1056928.trc.sas.com',
+    'client_id': 'dariansclientid',
+    'client_secret': 'dariansclientsecret',    
+    'username': 'daodir',                   
+    'password': 'daodir1',              
+    'authentication': 'oauth',
+    'context': 'SAS Studio compute context' 
 }

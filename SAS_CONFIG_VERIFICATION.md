@@ -2,7 +2,9 @@
 
 ## Understanding the Configuration
 
-The line `self.sas = saspy.SASsession(cfgname='viya')` tells SASPy to use a configuration named 'viya' from your SAS configuration file.
+Your screenshot shows OAuth2 authentication tokens, which indicates your SAS Viya environment uses modern OAuth2 authentication. The integration now includes an authentication handler that supports both OAuth2 and traditional username/password methods.
+
+The system automatically detects and uses the appropriate authentication method for your environment.
 
 ## Your Current Setup
 
@@ -20,25 +22,27 @@ viya = {
 
 ## How to Verify in Your Environment
 
-### Method 1: Quick Check
+### Method 1: OAuth2 Setup and Test
+```bash
+cd backend
+python oauth2_setup_guide.py
+```
+
+This creates OAuth2-compatible configurations and tests both authentication methods.
+
+### Method 2: Authentication Handler Test
+```bash
+cd backend
+python sas_auth_handler.py
+```
+
+This tests the integrated authentication handler that automatically handles OAuth2 and username/password authentication.
+
+### Method 3: Quick Connection Check
 ```bash
 cd backend
 python check_sas_setup.py
 ```
-
-This will tell you immediately if the 'viya' configuration is working.
-
-### Method 2: Detailed Verification
-```bash
-cd backend
-python verify_sas_config.py
-```
-
-This runs comprehensive tests including:
-- SASPy import and configuration detection
-- Configuration file validation
-- SAS connection testing
-- Table access verification
 
 ### Method 3: Manual Python Test
 

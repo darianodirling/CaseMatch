@@ -28,26 +28,28 @@ TOPIC_VECTORS_TABLE=topic_vectors.sashdat
 TOPIC_VECTORS_CASLIB=CASUSER(daodir)
 ```
 
-### 3. Test SAS Viya Connection
+### 3. Test SAS Viya Connection with OAuth2
 
-Run the comprehensive test suite:
+Your SAS environment uses OAuth2 authentication. Run the OAuth2-aware setup:
 
 ```bash
 cd backend
-python test_integration.py
+python oauth2_setup_guide.py
+```
+
+This will create OAuth2-compatible configurations and test authentication. Then run:
+
+```bash
+python sas_auth_handler.py
 ```
 
 Expected output when working:
 ```
-✓ PASS Dependencies
-✓ PASS Configuration  
-✓ PASS SAS Connection
-✓ PASS Table Access
-✓ PASS Similarity Logic
-✓ PASS Flask Endpoints
-✓ PASS End-to-End
-Results: 7/7 tests passed (100.0%)
+✓ SAS connection successful
+✓ SAS session working
 ```
+
+The integration automatically handles both OAuth2 and username/password authentication methods.
 
 ### 4. Start Backend Server
 
