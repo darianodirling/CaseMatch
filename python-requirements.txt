@@ -1,0 +1,21 @@
+# Python Dependencies for CaseMatch Local Development
+# Install with: pip install -r python-requirements.txt
+
+# CAS Connectivity for SAS Viya
+swat>=1.13.0
+pandas>=1.5.0
+
+# Web Framework (if running Flask separately)
+flask>=2.0.0
+flask-cors>=4.0.0
+
+# Data Processing
+numpy>=1.21.0
+scikit-learn>=1.0.0
+
+# Environment and Utilities
+python-dotenv>=0.19.0
+requests>=2.28.0
+
+# Optional: Additional SAS Tools
+saspy>=4.0.0
