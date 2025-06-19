@@ -2,7 +2,12 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import logging
 import os
+from dotenv import load_dotenv
+from cas_connection import load_table_preview, test_cas_connection, CASConnectionError
 from similarity import get_similar_cases
+
+# Load environment variables
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -151,6 +156,64 @@ def internal_error(error):
         'success': False,
         'error': 'Internal server error'
     }), 500
+
+@app.route('/table-preview', methods=['GET'])
+def table_preview():
+    """
+    Get preview of the topic_vectors table from CAS
+    Returns first 5 rows as JSON
+    """
+    try:
+        logger.info("Loading table preview from CAS")
+        
+        # Load preview data from CAS table
+        preview_data = load_table_preview("topic_vectors", rows=5)
+        
+        return jsonify({
+            'success': True,
+            'table_name': 'topic_vectors',
+            'rows_returned': len(preview_data),
+            'data': preview_data,
+            'message': f'Successfully loaded {len(preview_data)} rows from topic_vectors table'
+        }), 200
+        
+    except CASConnectionError as e:
+        logger.error(f"CAS connection error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'CAS connection failed',
+            'message': str(e)
+        }), 503
+        
+    except Exception as e:
+        logger.error(f"Error loading table preview: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to load table preview',
+            'message': str(e)
+        }), 500
+
+@app.route('/cas-status', methods=['GET'])
+def cas_status():
+    """
+    Test CAS connection and return server status
+    """
+    try:
+        logger.info("Testing CAS connection")
+        status = test_cas_connection()
+        
+        if status['status'] == 'success':
+            return jsonify(status), 200
+        else:
+            return jsonify(status), 503
+            
+    except Exception as e:
+        logger.error(f"Error testing CAS connection: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'error': str(e),
+            'message': 'CAS connection test failed'
+        }), 500
 
 if __name__ == '__main__':
     # Get configuration from environment variables

@@ -8,6 +8,7 @@ dependencies = [
     "flask-cors>=6.0.1",
     "numpy>=2.3.0",
     "pandas>=2.3.0",
+    "python-dotenv>=1.1.0",
     "saspy>=5.103.0",
     "scikit-learn>=1.7.0",
 ]
