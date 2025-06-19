@@ -15,7 +15,7 @@ import json
 sys.path.append('${path.join(process.cwd(), 'backend')}')
 
 try:
-    from final_cas_connector import ${functionName}
+    from cas_service import ${functionName}
     
     if '${functionName}' == 'test_cas_server_connection':
         result = ${functionName}()
