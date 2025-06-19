@@ -30,16 +30,23 @@ TOPIC_VECTORS_CASLIB=casuser
 
 ### 3. Test SAS Viya Connection
 
+Run the comprehensive test suite:
+
 ```bash
 cd backend
-python test_connection.py
+python test_integration.py
 ```
 
 Expected output when working:
 ```
-✓ SAS Viya connection successful
-✓ Topic vectors loaded successfully
-✓ Loaded [N] records from topic_vectors
+✓ PASS Dependencies
+✓ PASS Configuration  
+✓ PASS SAS Connection
+✓ PASS Table Access
+✓ PASS Similarity Logic
+✓ PASS Flask Endpoints
+✓ PASS End-to-End
+Results: 7/7 tests passed (100.0%)
 ```
 
 ### 4. Start Backend Server
@@ -86,12 +93,15 @@ curl -X POST http://localhost:5001/search \
 
 ## Data Requirements
 
-Your `topic_vectors` table should contain:
-- `case_number`: Unique case identifier
-- `title` or `description`: Case description
-- `resolution`: Resolution text
-- `assignment_group`, `case_type`, `status`: Metadata
-- Vector columns (e.g., `topic_1`, `topic_2`, etc.)
+Your `topic_vectors` table contains:
+- `__uniqueid__`: Unique identifier
+- `Case Number`: Case identifier for search
+- `Description`: Case description text
+- `Resolution`: Resolution details
+- `Assignment Group`: Case assignment information
+- `Concern`: Issue description
+- Vector columns: `_TextTopic_1` through `_TextTopic_5` (topic vectors)
+- Additional columns: `_Col1_` through `_Col5_` (supplementary vectors)
 
 ## Troubleshooting
 

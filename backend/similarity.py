@@ -160,11 +160,12 @@ class SimilaritySearcher:
                 logger.error("No vector columns found in topic_vectors data")
                 return []
             
-            # Get target vector
-            target_vector = target_case[vector_columns].values
+            # Get target vector - handle DataFrame row selection properly
+            target_row = target_case[vector_columns].iloc[0]
+            target_vector = np.array(target_row).reshape(1, -1)
             
-            # Get all vectors
-            all_vectors = self.topic_vectors_data[vector_columns].values
+            # Get all vectors as numpy array
+            all_vectors = self.topic_vectors_data[vector_columns].to_numpy()
             
             # Calculate cosine similarity
             similarities = cosine_similarity(target_vector, all_vectors)[0]
