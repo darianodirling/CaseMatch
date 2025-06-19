@@ -9,6 +9,7 @@ dependencies = [
     "numpy>=2.3.0",
     "pandas>=2.3.0",
     "python-dotenv>=1.1.0",
+    "requests>=2.32.4",
     "saspy>=5.103.0",
     "scikit-learn>=1.7.0",
 ]

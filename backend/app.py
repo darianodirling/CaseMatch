@@ -182,7 +182,8 @@ def table_preview():
         return jsonify({
             'success': False,
             'error': 'CAS connection failed',
-            'message': str(e)
+            'message': str(e),
+            'note': 'Server requires VPN access. Test locally with network access to trck1056928.trc.sas.com'
         }), 503
         
     except Exception as e:

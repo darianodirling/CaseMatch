@@ -30,6 +30,10 @@ def get_cas_connection():
         CASConnectionError: If connection fails
     """
     try:
+        # Check if we're in development mode (no external access)
+        if os.getenv('DEVELOPMENT_MODE', 'true').lower() == 'true':
+            raise CASConnectionError("Development mode: External CAS server not accessible from Replit")
+        
         import swat
         
         # Get credentials from environment
@@ -84,8 +88,7 @@ def load_table_preview(table_name: str = "topic_vectors", library: str = None, r
         conn = get_cas_connection()
         
         # Use library from environment if not provided
-        if library is None:
-            library = os.getenv('CAS_LIBRARY', 'casuser')
+        library = library or os.getenv('CAS_LIBRARY', 'casuser')
         
         logger.info(f"Loading {rows} rows from {library}.{table_name}")
         
