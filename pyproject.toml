@@ -12,4 +12,5 @@ dependencies = [
     "requests>=2.32.4",
     "saspy>=5.103.0",
     "scikit-learn>=1.7.0",
+    "swat>=1.15.0",
 ]

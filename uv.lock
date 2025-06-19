@@ -351,6 +351,7 @@ dependencies = [
     { name = "requests" },
     { name = "saspy" },
     { name = "scikit-learn" },
+    { name = "swat" },
 ]
 
 [package.metadata]
@@ -363,6 +364,7 @@ requires-dist = [
     { name = "requests", specifier = ">=2.32.4" },
     { name = "saspy", specifier = ">=5.103.0" },
     { name = "scikit-learn", specifier = ">=1.7.0" },
+    { name = "swat", specifier = ">=1.15.0" },
 ]
 
 [[package]]
@@ -476,6 +478,30 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81", size = 34031 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274", size = 11050 },
+]
+
+[[package]]
+name = "swat"
+version = "1.15.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pandas" },
+    { name = "pytz" },
+    { name = "requests" },
+    { name = "six" },
+    { name = "urllib3" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3c/dc/9530a5b9a299a7f23b842bae72edc706a3fba0d616d6a232379101f867e0/swat-1.15.0-0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:e82227ec98642a752368eb5c3da7acbf670e3740e5b10b0ac0072ad928ec9dd7", size = 466274 },
+    { url = "https://files.pythonhosted.org/packages/c1/76/dd9b1163b2092bb16f3567a231b28116fe859e0cd5552b8a953e13b5a230/swat-1.15.0-0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:c1389560bda6f90462958327348f97b6c61b2169e4699b5b5a09e8d6bfc20354", size = 466271 },
+    { url = "https://files.pythonhosted.org/packages/17/00/6727a97ad2f94146fc477053656a8579c414083fb77d9f35865b00343c95/swat-1.15.0-0-cp311-cp311-manylinux1_x86_64.whl", hash = "sha256:5377caddac78cbc914d859efe07e1eb5b25c59a73661507172b37ad0992bab68", size = 45374448 },
+    { url = "https://files.pythonhosted.org/packages/e9/70/cd03f6a074bcc6d9a6617010ce6ca021c0f348b492c37f0e88ce10486f87/swat-1.15.0-0-cp311-cp311-manylinux2014_ppc64le.whl", hash = "sha256:59045803441a1869f48bf72e7850f41d5823a93b322fe38ffe44e175baeb0bc4", size = 466245 },
+    { url = "https://files.pythonhosted.org/packages/cc/4d/20bb456799794e1b7ba7fb71969dde39a22d3b64cc81aaf10d6735df7fb5/swat-1.15.0-0-cp311-cp311-win_amd64.whl", hash = "sha256:168dd9e5613b654aa1f958cfba9dc69a23119b43c5f7f0fc1cb7f602101fe9d9", size = 60619962 },
+    { url = "https://files.pythonhosted.org/packages/86/57/f2086349c2786b9f1a14f083915fc8e9e7d0e564395e7efe23e102d990fe/swat-1.15.0-0-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:21e33d226f93a0b007b2560dc6c6296a98fc59aba540ad617cf3747de376f91d", size = 466270 },
+    { url = "https://files.pythonhosted.org/packages/0c/41/cc4826dd34c7df8a45a05d5c20e4d9e17be153d0a4b83c58ae7b93b3aec6/swat-1.15.0-0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:3c95de78ede0afbcaaf189f96495b4db7898ed4e59debd08b2689370bf80ae96", size = 466270 },
+    { url = "https://files.pythonhosted.org/packages/67/44/bc666d7f921aeb94da3dd5157972c43448685088809d6a330606ac166fd7/swat-1.15.0-0-cp312-cp312-manylinux1_x86_64.whl", hash = "sha256:af49a2e14ccab71466e0ccd39153474f74620d1930b83ce0600d09eff67f56ae", size = 45388181 },
+    { url = "https://files.pythonhosted.org/packages/f8/cc/d037c68bf166d59dbee25e336ee23ce675fcb63711bb1d83333cbf691ed0/swat-1.15.0-0-cp312-cp312-manylinux2014_ppc64le.whl", hash = "sha256:01dcd770a2e25cc402c3c1182513cc78a8e6b7c8baa8839f02f8039d4daa0bc8", size = 466247 },
+    { url = "https://files.pythonhosted.org/packages/41/06/9f7302901130e3222b5908b0f0da2b0ff45d371f6cdf1b0e5ab6663ab0d8/swat-1.15.0-0-cp312-cp312-win_amd64.whl", hash = "sha256:5fb0916311485ba73ab40d1b9765b3b7b42b1f4318673f4fa93fbff872da27fb", size = 60633627 },
 ]
 
 [[package]]
