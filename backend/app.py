@@ -3,7 +3,7 @@ from flask_cors import CORS
 import logging
 import os
 from dotenv import load_dotenv
-from cas_connection import load_table_preview, test_cas_connection, CASConnectionError
+from production_cas import load_topic_vectors_preview, test_cas_server_connection, CASConnectionError
 from similarity import get_similar_cases
 
 # Load environment variables
@@ -167,7 +167,7 @@ def table_preview():
         logger.info("Loading table preview from CAS")
         
         # Load preview data from CAS table
-        preview_data = load_table_preview("topic_vectors", rows=5)
+        preview_data = load_topic_vectors_preview(rows=5)
         
         return jsonify({
             'success': True,
@@ -201,7 +201,7 @@ def cas_status():
     """
     try:
         logger.info("Testing CAS connection")
-        status = test_cas_connection()
+        status = test_cas_server_connection()
         
         if status['status'] == 'success':
             return jsonify(status), 200
