@@ -19,37 +19,36 @@ pip install flask flask-cors saspy scikit-learn pandas numpy
 
 ### 2. Configure Environment
 
-The `.env` file is configured with your exact table configuration:
+The `.env` file is configured with your OAuth2 credentials and table setup:
 ```
 SAS_HOST=trck1056928.trc.sas.com
 SAS_USERNAME=daodir
 SAS_PASSWORD=daodir1
+SAS_CLIENT_ID=dariansclientid
+SAS_CLIENT_SECRET=dariansclientsecret
 TOPIC_VECTORS_TABLE=topic_vectors.sashdat
 TOPIC_VECTORS_CASLIB=CASUSER(daodir)
 ```
 
 ### 3. Test SAS Viya Connection with OAuth2
 
-Your SAS environment uses OAuth2 authentication. Run the OAuth2-aware setup:
+Test your OAuth2 configuration with your specific client credentials:
 
 ```bash
 cd backend
-python oauth2_setup_guide.py
-```
-
-This will create OAuth2-compatible configurations and test authentication. Then run:
-
-```bash
-python sas_auth_handler.py
+python test_oauth2_connection.py
 ```
 
 Expected output when working:
 ```
-✓ SAS connection successful
+✓ OAuth2 connection established
 ✓ SAS session working
+✓ CAS connection working
+✓ Table access confirmed
+✓ Your OAuth2 setup is working correctly
 ```
 
-The integration automatically handles both OAuth2 and username/password authentication methods.
+The integration uses your OAuth2 client ID (dariansclientid) for authentication.
 
 ### 4. Start Backend Server
 

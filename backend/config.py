@@ -47,14 +47,15 @@ class Config:
     
     @classmethod
     def get_sas_config(cls) -> Dict[str, Any]:
-        """Get SAS configuration dictionary for SAS Viya"""
+        """Get SAS configuration dictionary for SAS Viya with OAuth2"""
         config = {
-            'url': f'https://{cls.SAS_HOST}',
-            'user': cls.SAS_USERNAME,
-            'pw': cls.SAS_PASSWORD,
-            'context': 'SAS Studio compute context',
-            'options': ['-fullstimer'],
-            'encoding': 'utf8'
+            'sasurl': f'https://{cls.SAS_HOST}',
+            'client_id': 'dariansclientid',
+            'client_secret': 'dariansclientsecret',    
+            'username': cls.SAS_USERNAME,                   
+            'password': cls.SAS_PASSWORD,              
+            'authentication': 'oauth',
+            'context': 'SAS Studio compute context' 
         }
         
         return config
