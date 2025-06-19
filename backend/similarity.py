@@ -142,18 +142,19 @@ class SimilaritySearcher:
                 logger.error("Topic vectors data not loaded")
                 return []
             
-            # Find the target case
+            # Find the target case - check both possible column names
+            case_col = 'Case Number' if 'Case Number' in self.topic_vectors_data.columns else 'case_number'
             target_case = self.topic_vectors_data[
-                self.topic_vectors_data['case_number'] == case_number
+                self.topic_vectors_data[case_col] == case_number
             ]
             
             if target_case.empty:
                 logger.warning(f"Case number {case_number} not found in topic_vectors")
                 return []
             
-            # Extract vector columns (assuming they start with 'topic_' or 'vector_')
+            # Extract vector columns based on your table structure
             vector_columns = [col for col in self.topic_vectors_data.columns 
-                            if col.startswith(('topic_', 'vector_', 'dim_'))]
+                            if col.startswith(('_TextTopic_', '_Col'))]
             
             if not vector_columns:
                 logger.error("No vector columns found in topic_vectors data")
@@ -174,15 +175,16 @@ class SimilaritySearcher:
                 row = self.topic_vectors_data.iloc[idx]
                 
                 # Skip the target case itself
-                if row['case_number'] == case_number:
+                current_case_number = row.get('Case Number', row.get('case_number', ''))
+                if current_case_number == case_number:
                     continue
                 
                 result = {
-                    'case_number': row['case_number'],
+                    'case_number': row.get('Case Number', row.get('case_number', 'Unknown')),
                     'similarity_score': float(similarity_score),
-                    'resolution': row.get('resolution', 'No resolution available'),
-                    'title': row.get('title', row.get('description', 'No title available')),
-                    'assignment_group': row.get('assignment_group', 'Unknown'),
+                    'resolution': row.get('Resolution', row.get('resolution', 'No resolution available')),
+                    'title': row.get('Description', row.get('Concern', row.get('description', 'No description available'))),
+                    'assignment_group': row.get('Assignment Group', row.get('assignment_group', 'Unknown')),
                     'case_type': row.get('case_type', 'Unknown'),
                     'status': row.get('status', 'Unknown')
                 }
